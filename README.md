@@ -8,7 +8,7 @@
 * [Technologies](#technologies)
 
 ## Participants:
-* [Arkadiusz Jędrzejewski (Lider)](https://github.com/arkjedrz)
+* [Arkadiusz Jędrzejewski (Leader)](https://github.com/arkjedrz)
 * [Kamil Legierski](https://github.com/Mixer3394)
 * [Volodymyr Dovhanych](https://github.com/Dowhanych)
 
