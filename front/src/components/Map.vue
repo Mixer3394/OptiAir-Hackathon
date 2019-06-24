@@ -38,23 +38,23 @@ const Map = Vue.extend({
             });
 
             let result = [{
-                name: "Pm2",
-                result: +Math.floor(Math.random() * 10)
+                name: "PM 1",
+                result: +Math.floor(Math.random() * 10) + "µg/m3"
             },{
-                name: "Pm2.5",
-                result: +Math.floor(Math.random() * 250)
+                name: "PM 2.5",
+                result: +Math.floor(Math.random() * 250) + "µg/m3"
             },{
-                name: "Pm10",
-                result: +Math.floor(Math.random() * 1000)
+                name: "PM 10",
+                result: +Math.floor(Math.random() * 1000) + "µg/m3"
             },{
                 name: "Temperatura",
-                result: +Math.floor(Math.random() * 40)
+                result: +Math.floor(Math.random() * 40) + "°C"
             },{
                 name: "Wilgotność",
-                result: +Math.floor(Math.random() * 10)
+                result: +Math.floor(Math.random() * 10) + "%"
             },{
                 name: "Ciśnienie",
-                result: +Math.floor(Math.random() * 75)+" Psi"
+                result: +Math.floor(Math.random() * 75) + " hPa"
             }];
             this.$emit('chooseMarker', result);
           console.log(list);

@@ -1,8 +1,8 @@
 <template>
   <div id="AddDevice" class="add-device" >
     <div class="form-group">
-        <label for="exampleInputPassword1">Mac Adress</label>
-        <input type="text" class="form-control" id="exampleInputPassword1" placeholder="MA:CA:DR:ES:s">
+        <label for="exampleInputPassword1">Adres MAC</label>
+        <input type="text" class="form-control" id="exampleInputPassword1" placeholder="MA:CA:dd:re:ss">
     </div>
   </div>
 </template>
