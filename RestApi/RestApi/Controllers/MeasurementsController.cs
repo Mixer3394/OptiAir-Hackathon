@@ -40,6 +40,47 @@ namespace RestApi.Controllers
 
                 _Context.Measurements.Add(measurement);
 
+                _Context.Measurements.Add(new Measurement()
+                {
+                    PM1 = 1,
+                    PM10 = 10,
+                    PM25 = 2.5,
+                    Pressure = 1028.00,
+                    Humidity = 45,
+                    DeviceMAC = "00:0A:E6:3E:FD:E0"
+                });
+
+
+                _Context.Measurements.Add(new Measurement()
+                {
+                    PM1 = 1,
+                    PM10 = 10,
+                    PM25 = 2.5,
+                    Pressure = 1028.00,
+                    Humidity = 45,
+                    DeviceMAC = "00:0A:E6:3E:FD:E2"
+                });
+
+                _Context.Measurements.Add(new Measurement()
+                {
+                    PM1 = 1,
+                    PM10 = 10,
+                    PM25 = 2.5,
+                    Pressure = 1028.00,
+                    Humidity = 45,
+                    DeviceMAC = "00:0A:E6:3E:FD:E3"
+                });
+
+                _Context.Measurements.Add(new Measurement()
+                {
+                    PM1 = 1,
+                    PM10 = 10,
+                    PM25 = 2.5,
+                    Pressure = 1028.00,
+                    Humidity = 45,
+                    DeviceMAC = "00:0A:E6:3E:FD:E4"
+                });    
+
                 _Context.SaveChanges();
             }
         }
@@ -53,7 +94,7 @@ namespace RestApi.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Measurement>>> GetMeasurements()
         {
-            return await _Context.Measurements.ToListAsync();
+            return await _Context.Measurements.OrderByDescending(m => m.DateTime).ToListAsync();
         }
 
         [HttpGet("{id}")]

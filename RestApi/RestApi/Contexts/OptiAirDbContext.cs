@@ -14,7 +14,40 @@ namespace RestApi.Contexts
             optionsBuilder.UseSqlite("Filename=OptiAirDatabse.db");
         }
 
-        public DbSet<Device> Devices { get; set; }
+        //protected override void OnModelCreating(ModelBuilder modelBuilder)
+        //{
+        //    //modelBuilder.Entity<Measurement>()
+        //    // .HasOne(p => p.Device)
+        //    // .WithMany(b => b.Measurements)
+        //    // .HasForeignKey(p => p.DeviceMAC);
+
+        //    modelBuilder.Entity<Device>()
+
+
+
+        //    //    modelBuilder.Entity<Measurement>()
+        //    //         .HasOne(relation => relation.Device)
+        //    //         .WithMany(issue => issue.Measurements)
+        //    //         .HasForeignKey(relation => relation.DeviceMAC);
+        //    //    //modelBuilder.Entity<IssueSprint>()
+        //    //    //    .HasKey(record => new { record.IssueId, record.SprintId });
+
+        //    //    //// 1:N connection from relation entity to issue
+        //    //    //modelBuilder.Entity<IssueSprint>()
+        //    //    //    .HasOne(relation => relation.Issue)
+        //    //    //    .WithMany(issue => issue.Sprints)
+        //    //    //    .HasForeignKey(relation => relation.IssueId);
+
+        //    //    //// 1:N connection from relation entity to sprint
+        //    //    //modelBuilder.Entity<IssueSprint>()
+        //    //    //    .HasOne(relation => relation.Sprint)
+        //    //    //    .WithMany(sprint => sprint.Issues)
+        //    //    //    .HasForeignKey(relation => relation.SprintId);
+
+        //    //    base.OnModelCreating(modelBuilder);
+        //}
+
+    public DbSet<Device> Devices { get; set; }
         public DbSet<Measurement> Measurements { get; set; }
     }
 }

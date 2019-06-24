@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -9,16 +10,17 @@ namespace RestApi.Models
     public class Device
     {
         public int Id { get; set; }
-        [Required]
-        public string Name { get; set; }
-        [Required]
+        //[Required]
         public string MAC { get; set; }
-        [Required]
+        //[Required]
+        public string Name { get; set; }
+        //[Required]
         public double Latitude { get; set; }
-        [Required]
+        //[Required]
         public double Longitude { get; set; }
         public bool IsVerify { get; set; } = false;
-        public virtual ICollection<Measurement> Measurements { get; set; }
+
+        public virtual List<Measurement> Measurements { get; set; }
 
     }
 }
