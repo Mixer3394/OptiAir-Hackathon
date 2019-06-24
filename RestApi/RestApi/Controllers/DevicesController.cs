@@ -5,7 +5,10 @@ using RestApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
+using System.Web.Http;
 
 namespace RestApi.Controllers
 {
@@ -143,14 +146,21 @@ namespace RestApi.Controllers
         #endregion
 
         #region POST
-        //[HttpPost]
-        //public async Task<ActionResult<Device>> PostDevice(Device device)
-        //{
-        //    _Context.Devices.Add(device);
-        //    await _Context.SaveChangesAsync();
+        [HttpPost]
+        public async Task<ActionResult<Device>> PostDevice(Device device)
+        {
+            if (_Context.Devices.Where(d => d.MAC == device.MAC).ToList().Count() > 0)
+            {
+                BadRequestErrorMessageResult badRequestErrorMessageResult = new BadRequestErrorMessageResult($"This MAC address({device.MAC}) is already used");
 
-        //    return CreatedAtAction(nameof(GetDevice), new { id = device.Id }, device);
-        //}
+                return BadRequest(badRequestErrorMessageResult);
+            }
+
+            _Context.Devices.Add(device);
+            await _Context.SaveChangesAsync();
+
+            return CreatedAtAction(nameof(GetDevice), new { id = device.MAC }, device);
+        }
         #endregion
 
         #region DELETE
