@@ -1,8 +1,7 @@
 <template>
-  <div class="info-block">
+  <div id="info-block" v-bind:class="[hide ? 'hidden' : '', 'info-block']">
     <div class="header">
-        <h3>General Info</h3>
-        <h3>{{test}}</h3>
+        <h3>Informacja: <font-awesome-icon style="float:right" icon="times-circle" @click="hide=true" /></h3>        
     </div>
     <div class="tail">
 
@@ -14,13 +13,6 @@
                 </tr>
             </tbody>
         </table>
-
-        <!-- <ul class="list-group list-group-flush">
-            <li class="list-group-item">{{"PM 1" + model.pm1}}</li>
-            <li class="list-group-item">{{"PM 2.5" + model.pm2}}</li>
-            <li class="list-group-item">{{"PM 10" + model.pm10}}</li>
-            <li class="list-group-item">{{"PM1" + model.pm1}}</li>
-        </ul> -->
     </div>
   </div>
 </template>
@@ -28,21 +20,21 @@
 <script>
 import Vue from "vue";
 
-//var map = leaflet.map('mapid').setView([51.505, -0.09], 13);
-
 const Info = Vue.extend({
     props: ["measurement", "test"],
-//   data(){
-//         return{
-            
-//         }
-//   },
-//   created(){
-//     //   this.model.measurement = this.$props.measurement; 
-//   },
-//   methods:{
-      
-//   }  
+  data(){
+        return{
+            hide:false        
+        }
+  },
+  created(){
+      this.hide = true; 
+  },
+  watch: { 
+        measurement: function(newVal, oldVal) {
+            this.hide=false;
+        }
+    }
 })
 
 export default Info;
@@ -53,19 +45,18 @@ export default Info;
 .info-block{
     position: absolute;
     width:300px;
-    /* height: 220px; */
-    /* background: red; */
     top:0px;
     right: 0px;
     z-index: 999;
     margin: 15px;
     background: rgba(0,0,0, 0.3);
     box-shadow: 0px 0px 22px 0px rgba(0,0,0,0.3);
-    
+    text-align: left;
+    opacity: 1;
     color: white;
+    transition: opacity 1s ease-in-out; 
 }
 .header h3{
-    /* border-bottom: 1px solid white; */
     padding: 10px 0px;
     margin: 0px 15px;
 }

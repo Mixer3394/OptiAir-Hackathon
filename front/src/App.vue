@@ -1,9 +1,8 @@
 <template>
   <div id="app" class="app">
-    <!-- <img alt="Vue logo" src="./assets/logo.png"> -->
-    <!-- <HelloWorld msg="Welcome to Your Vue.js App"/> -->
-    <Map  :markers="markers" @chooseMarker='measurement = $event'/>
-    <Info class="d-none d-sm-block"  :measurement="measurement"  />
+    <Map  :markers="markers" @chooseMarker='measurement = $event' @AddDevice="isAddDevice=true"/>
+    <Info @hide="hideInfo = true"   :measurement="measurement"  />
+    <AddDevice v-if="isAddDevice" @close="isAddDevice=false"/>
   </div>
 </template>
 
@@ -11,16 +10,20 @@
 import HelloWorld from './components/HelloWorld.vue'
 import Map from "./components/Map";
 import Info from "./components/Info";
+import AddDevice from "./components/AddDevice";
+
 import axios from "axios";
 
 export default {
   name: 'app',
   components: {
     Map,
-    Info
+    Info,
+    AddDevice
   },
   data(){
     return{
+        isAddDevice:false,
         measurement: [
            {
                 name: "Pm1",
@@ -45,35 +48,7 @@ export default {
       markers:[]
     }
   },
-  computed:{
-    // measurement(){
-    //   return this.model.measurement;
-    // }
-  },
   created(){
-    setTimeout(()=>{
-      this.measurement = [
-           {
-                name: "Pm2",
-                result: "10"
-            },{
-                name: "Pm2.5",
-                result: "25"
-            },{
-                name: "Pm10",
-                result: "14"
-            },{
-                name: "Temperatura",
-                result: "21"
-            },{
-                name: "Wilgotność",
-                result: "5/10"
-            },{
-                name: "Ciśnienie",
-                result: "60 Psi"
-            }
-        ];
-    }, 5000);
 
     axios.get("https://optiair.azurewebsites.net/api/devices",
     {
@@ -82,49 +57,11 @@ export default {
     })
     .then( response =>{
       console.table(response.data);
-      
-      //console.table(response.data);
-      // let dd = [];
-      // let d1 = response.data;
-      // for(let dataEl of d1){
-      //   dd.push(dataEl);
-      //   let el = dd[dd.length-1];
-      //   let lt = el.latitude;
-      //   //el.latitude = el.longitude;
-      // //   dd[dd.length-1].longitude = lt;
-      // }
-      // console.log("------------");
-      // console.log(dd);
-      /*
-       */
-      //this.markers = response.data;
       this.markers = response.data;
     }) 
   },
   mounted(){
     console.log(this.measurement);
-
-    this.measurement = [
-           {
-                name: "Pm1",
-                result: "10"
-            },{
-                name: "Pm2.5",
-                result: "25"
-            },{
-                name: "Pm10",
-                result: "14"
-            },{
-                name: "Temperatura",
-                result: "21"
-            },{
-                name: "Wilgotność",
-                result: "5/10"
-            },{
-                name: "Ciśnienie",
-                result: "60 Psi"
-            }
-        ];
   }
 }
 </script>
@@ -184,5 +121,10 @@ path.leaflet-interactive,
 @-o-keyframes fadein {
     from { opacity: 0; }
 }
-
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
+}
 </style>
