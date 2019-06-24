@@ -133,7 +133,7 @@ namespace RestApi.Controllers
 
         #region PUT
 
-        [HttpPost("{Id}")]
+        [HttpPost("{Id}"), Authorize]
         public async Task<ActionResult<Device>> EditDevice(int id, Measurement measurement)
         {
             if (id != measurement.MeasurementId)
@@ -163,7 +163,7 @@ namespace RestApi.Controllers
 
         #region DELETE
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}"), Authorize]
         public async Task<IActionResult> DeleteMeasurement(int id)
         {
             var measurement = await _Context.Measurements.FindAsync(id);
