@@ -1,8 +1,8 @@
 <template>
   <div id="app" class="app">
-    <Map  :markers="markers" @chooseMarker='measurement = $event' @AddDevice="isAddDevice=true"/>
+    <Map  :markers="markers" @chooseMarker='measurement = $event' @AddDevice="addDeviceLocation=$event;isAddDevice=true"/>
     <Info @hide="hideInfo = true"   :measurement="measurement"  />
-    <AddDevice v-if="isAddDevice" @close="isAddDevice=false"/>
+    <AddDevice v-if="isAddDevice" :location="addDeviceLocation" @close="isAddDevice=false" />
   </div>
 </template>
 
@@ -24,6 +24,7 @@ export default {
   data(){
     return{
         isAddDevice:false,
+        addDeviceLocation:{},
         measurement: [
            {
                 name: "Pm1",

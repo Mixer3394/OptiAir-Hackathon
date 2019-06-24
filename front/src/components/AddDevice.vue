@@ -1,8 +1,11 @@
 <template>
   <div id="AddDevice" class="add-device" >
     <div class="form-group">
-        <label for="exampleInputPassword1">Mac Adress</label>
-        <input type="text" class="form-control" v-model="mcadress" placeholder="MA:CA:DR:ES:s">
+        
+        <label for="exampleInputPassword1">Nazwa</label>
+        <input type="text" class="form-control" v-model="name" placeholder="Stocznia">
+        <label for="exampleInputPassword1">Adres MAC</label>
+        <input type="text" class="form-control" v-model="mcadress" placeholder="MA:CA:DD:RE:SS">
         <button class="btn" @click="sendMac" >Dodaj</button>
     </div>
   </div>
@@ -17,7 +20,8 @@ const Info = Vue.extend({
   data(){
         return{
             hide:false,
-            mcadress:""        
+            mcadress:"",
+            name: ""     
         }
   },
   created(){
@@ -34,13 +38,15 @@ const Info = Vue.extend({
         //     });
 
 
+        console.log(this.$props.location);
+
         axios({
             method: 'post',
             url: "https://optiair.azurewebsites.net/api/devices/",
             data: {
                     // "mac": "01:0A:E6:3E:FD:E3",
                     "mac": this.mcadress.toUpperCase(),
-                    "name": "DUPA SLONIA",
+                    "name": this.name,
                     "latitude": this.$props.location.lat,
                     "longitude": this.$props.location.lng,
                     "isVerified": true
@@ -51,7 +57,7 @@ const Info = Vue.extend({
         }).then(function (response) {
             console.log(response);
         }).catch(function (error) {
-            console.error(error);
+            console.log(error.message);
         });
     }   
   }  ,

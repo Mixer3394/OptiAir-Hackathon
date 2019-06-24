@@ -32,6 +32,10 @@ const Map = Vue.extend({
         this.mapInition();
   },
   methods:{
+      // Click on marker 
+      //  this.model.mapMarkers <- here You have all little markers with diametr 40
+      // Big one with 300
+      // e parammetr is event parammetr, try to find coords and try to make it
       onMarkerClick(e){
             const list = this.markers.filter((marker) => {
                 return marker.latitude== e.latlng.lat && marker.longitude== e.latlng.lng;
@@ -82,14 +86,17 @@ const Map = Vue.extend({
             var popup = L.popup().setContent('<p>Hello world!<br />This is a nice popup.</p>'); 
             let but = document.createElement("button");
             but.setAttribute("class", "btn ");
-            but.addEventListener("click", ()=>{
-                this.$emit("AddDevice", "");
+            let _th = this;
+            but.addEventListener("click", function(e){
+                let atr = this.getAttribute("data-latlng").split(" ");
+                _th.$emit("AddDevice", {lat: atr[0], lng: atr[1]});
             }, false)
             but.innerText = "Dodaj nowe urządzenie";
             this.model.map.on('contextmenu',(e) => {
                 // close prev popups
+                console.log(e.latlng);
                 if($(".leaflet-popup-close-button").length>0) $(".leaflet-popup-close-button")[0].click() 
-                but.setAttribute("data-latlng", e.latlng)
+                but.setAttribute("data-latlng", e.latlng.lat + " " + e.latlng.lng )
                 L.popup()
                 .setLatLng(e.latlng)
                 .setContent(but)
@@ -114,6 +121,8 @@ const Map = Vue.extend({
             }
             this.model.mapMarkers= [];
 
+
+            
             for(let markerInfo of newVal){
                 let color = '#'+Math.floor(Math.random() * 256).toString(16)  +Math.floor(Math.random() * 256).toString(16)  +'77';
                 console.log(color);
@@ -123,7 +132,7 @@ const Map = Vue.extend({
                     stroke:false,
                     fillOpacity: 0.5,
                     radius: 300,
-                }).addTo(this.model.map);
+                }).addTo(this.model.map).on('click', this.onMarkerClick);
 
             }
             for(let markerInfo of newVal){
@@ -134,7 +143,7 @@ const Map = Vue.extend({
                     stroke:false,
                     fillOpacity: 0.5,
                     radius: 40
-                }).addTo(this.model.map).on('click', this.onMarkerClick);
+                }).addTo(this.model.map) //.on('click', this.onMarkerClick);
                 this.model.mapMarkers.push(mcircle);
             }
                     
