@@ -31,10 +31,6 @@ VALUES = list(BYTES_MEANING.values())
 
 NO_VALUES = len(BYTES_MEANING) + 1
 
-# class MockPms7003Sensor:
-
-
-
 class Pms7003Sensor:
 
     def __init__(self, serial_device):

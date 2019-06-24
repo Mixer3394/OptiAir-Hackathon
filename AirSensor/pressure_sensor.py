@@ -2,7 +2,9 @@ import bme280
 from smbus2 import SMBus
 
 class MockBme280Sensor:
-
+    """
+    Required due to real sensor failure.
+    """
     def pressure(self):
         return 1000
 
