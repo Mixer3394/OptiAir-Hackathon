@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RestApi.Contexts;
 using RestApi.Models;
@@ -149,7 +150,8 @@ namespace RestApi.Controllers
         #endregion
 
         #region POST
-        [HttpPost]
+        
+        [HttpPost,Authorize]
         public async Task<ActionResult<Measurement>> PostMeasurement(Measurement measurement)
         {
             _Context.Measurements.Add(measurement);
