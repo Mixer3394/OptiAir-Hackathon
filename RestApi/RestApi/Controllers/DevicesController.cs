@@ -32,7 +32,7 @@ namespace RestApi.Controllers
                     Longitude = 18.539444,
                     Latitude = 54.519167,
                     Name = "Initial",
-                    IsVerify = true,
+                    IsVerified = true,
                     MAC = "00:0A:E6:3E:FD:E1"
                 };
 
@@ -43,7 +43,7 @@ namespace RestApi.Controllers
                     Longitude = 18.538709,
                     Latitude = 54.521048,
                     Name = "Initial1",
-                    IsVerify = true,
+                    IsVerified = true,
                     MAC = "00:0A:E6:3E:FD:E0"
                 });
 
@@ -52,7 +52,7 @@ namespace RestApi.Controllers
                     Longitude = 18.5419,
                     Latitude = 54.517392,
                     Name = "Initial2",
-                    IsVerify = true,
+                    IsVerified = true,
                     MAC = "00:0A:E6:3E:FD:E2"
                 });
 
@@ -61,7 +61,7 @@ namespace RestApi.Controllers
                     Longitude = 18.534997,
                     Latitude = 54.517562,
                     Name = "Initial3",
-                    IsVerify = true,
+                    IsVerified = true,
                     MAC = "00:0A:E6:3E:FD:E3"
                 });
 
@@ -70,7 +70,7 @@ namespace RestApi.Controllers
                     Longitude = 18.530847,
                     Latitude = 54.521819,
                     Name = "Initial4",
-                    IsVerify = true,
+                    IsVerified = true,
                     MAC = "00:0A:E6:3E:FD:E4"
                 });
 
@@ -79,7 +79,7 @@ namespace RestApi.Controllers
                     Longitude = 18.52824,
                     Latitude = 54.518502,
                     Name = "Initial4",
-                    IsVerify = true,
+                    IsVerified = true,
                     MAC = "00:0A:E6:3E:FD:E4"
                 });
 

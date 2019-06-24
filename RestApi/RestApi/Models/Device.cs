@@ -18,7 +18,7 @@ namespace RestApi.Models
         public double Latitude { get; set; }
         //[Required]
         public double Longitude { get; set; }
-        public bool IsVerify { get; set; } = false;
+        public bool IsVerified { get; set; } = false;
 
         public virtual List<Measurement> Measurements { get; set; }
 
