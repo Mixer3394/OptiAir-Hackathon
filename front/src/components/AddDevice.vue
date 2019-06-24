@@ -2,29 +2,59 @@
   <div id="AddDevice" class="add-device" >
     <div class="form-group">
         <label for="exampleInputPassword1">Mac Adress</label>
-        <input type="text" class="form-control" id="exampleInputPassword1" placeholder="MA:CA:DR:ES:s">
+        <input type="text" class="form-control" v-model="mcadress" placeholder="MA:CA:DR:ES:s">
+        <button class="btn" @click="sendMac" >Dodaj</button>
     </div>
   </div>
 </template>
 
 <script>
 import Vue from "vue";
+import axios from "axios";
 
 const Info = Vue.extend({
-    props: ["measurement", "test"],
+    props: ["location"],
   data(){
         return{
-            hide:false        
+            hide:false,
+            mcadress:""        
         }
   },
   created(){
       this.hide = true; 
   },
-//   methods:{
-//     hideThis(){
-        
-//     }   
-//   }  
+  methods:{
+    sendMac(){
+        // axios.post("https://optiair.azurewebsites.net/api/devices/", {
+        //     "mac": "00:0A:E6:3E:FD:E3",
+        //     "name": "DUPA SLONIA",
+        //     "latitude": 54.517562,
+        //     "longitude": 18.534997,
+        //     "isVerified": true
+        //     });
+
+
+        axios({
+            method: 'post',
+            url: "https://optiair.azurewebsites.net/api/devices/",
+            data: {
+                    // "mac": "01:0A:E6:3E:FD:E3",
+                    "mac": this.mcadress.toUpperCase(),
+                    "name": "DUPA SLONIA",
+                    "latitude": this.$props.location.lat,
+                    "longitude": this.$props.location.lng,
+                    "isVerified": true
+                    },
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        }).then(function (response) {
+            console.log(response);
+        }).catch(function (error) {
+            console.error(error);
+        });
+    }   
+  }  ,
   watch: { 
         measurement: function(newVal, oldVal) {
             this.hide=false;

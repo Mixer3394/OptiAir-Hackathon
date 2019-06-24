@@ -100,10 +100,8 @@ const Map = Vue.extend({
       mapInition(){
           navigator.geolocation.getCurrentPosition((position) =>{
               if(this.model.map != undefined){
-                  setTimeout(()=>{
-                      setCookie("location", position.coords.latitude+" "+position.coords.longitude, 14);
-                      this.model.map.flyTo({lat:position.coords.latitude, lng:position.coords.longitude});
-                  },10);
+                    setCookie("location", position.coords.latitude+" "+position.coords.longitude, 14);
+                    this.model.map.flyTo({lat:position.coords.latitude, lng:position.coords.longitude});
                   
               }
           })
