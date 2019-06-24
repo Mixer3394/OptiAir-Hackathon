@@ -6,9 +6,14 @@ class Communication:
 
     def __init__(self, url):
         self._url = url
-        self._measurement_url = url + 'measurements/'
         self._headers = { 'content-type':'application/json' }
         self._mac = ''
+
+    def _measurement_url(self):
+        return self._url + 'measurements/'
+
+    def _login_url(self):
+        return self._url + 'devices/login/'
 
     def _get_mac(self):
         if self._mac == '':
@@ -27,9 +32,15 @@ class Communication:
         measurement['deviceMAC'] = self._get_mac()
         return measurement
 
+    def login(self):
+        login_data = {}
+        login_data['deviceMAC'] = self._get_mac()
+        login_request = requests.post(self._login_url(), json=login_data, headers=self._headers)
+        login_request.raise_for_status()
+
     def post_measurement(self, data):
         measurement_dict = self._create_dict_data(data)
-        post_request = requests.post(self._measurement_url, json=measurement_dict, headers=self._headers)
+        post_request = requests.post(self._measurement_url(), json=measurement_dict, headers=self._headers)
         post_request.raise_for_status()
 
 
