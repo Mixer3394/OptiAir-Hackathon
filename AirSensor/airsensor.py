@@ -1,3 +1,4 @@
+import measurement
 
 class AirSensor:
 
@@ -28,6 +29,11 @@ class AirSensor:
         return pressure
 
     def get_readout(self):
-        return self._get_dust_readout(), self._get_temp_readout(), self._get_humid_readout(), self._get_pressure_readout()
+        pm1_0, pm2_5, pm10 = self._get_dust_readout()
+        temp = self._get_temp_readout()
+        humid = self._get_humid_readout()
+        pressure = self._get_pressure_readout()
 
-
+        last_measurement = measurement.Measurement(pm1_0, pm2_5, pm10, temp, humid, pressure)
+        
+        return last_measurement
