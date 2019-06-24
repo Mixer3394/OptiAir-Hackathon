@@ -1,8 +1,8 @@
 <template>
   <div id="app" class="app">
-    <Map  :markers="markers" @chooseMarker='measurement = $event' @AddDevice="isAddDevice=true"/>
+    <Map  :markers="markers" @chooseMarker='measurement = $event' @AddDevice="addDeviceLocation=$event;isAddDevice=true"/>
     <Info @hide="hideInfo = true"   :measurement="measurement"  />
-    <AddDevice v-if="isAddDevice" @close="isAddDevice=false"/>
+    <AddDevice v-if="isAddDevice" :location="addDeviceLocation" @close="isAddDevice=false" />
   </div>
 </template>
 
@@ -24,6 +24,7 @@ export default {
   data(){
     return{
         isAddDevice:false,
+        addDeviceLocation:{},
         measurement: [
            {
                 name: "Pm1",
@@ -125,6 +126,9 @@ path.leaflet-interactive,
   transition: opacity .5s;
 }
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
+}
+.leaflet-popup-close-button{
   opacity: 0;
 }
 </style>
