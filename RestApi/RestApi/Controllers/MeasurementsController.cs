@@ -35,7 +35,7 @@ namespace RestApi.Controllers
                     PM25 = 2.5,
                     Pressure = 1028.00,
                     Humidity = 45,
-                    DeviceMAC = "00:0A:E6:3E:FD:E1"
+                    MAC = "00:0A:E6:3E:FD:E1"                    
                 };
 
                 _Context.Measurements.Add(measurement);
@@ -47,7 +47,17 @@ namespace RestApi.Controllers
                     PM25 = 2.5,
                     Pressure = 1028.00,
                     Humidity = 45,
-                    DeviceMAC = "00:0A:E6:3E:FD:E0"
+                    MAC = "00:0A:E6:3E:FD:E0"
+                });
+
+                _Context.Measurements.Add(new Measurement()
+                {
+                    PM1 = 2.6,
+                    PM10 = 10,
+                    PM25 = 2.5,
+                    Pressure = 1028.00,
+                    Humidity = 45,
+                    MAC = "00:0A:E6:3E:FD:E1"
                 });
 
 
@@ -58,7 +68,7 @@ namespace RestApi.Controllers
                     PM25 = 2.5,
                     Pressure = 1028.00,
                     Humidity = 45,
-                    DeviceMAC = "00:0A:E6:3E:FD:E2"
+                    MAC = "00:0A:E6:3E:FD:E2"
                 });
 
                 _Context.Measurements.Add(new Measurement()
@@ -68,7 +78,7 @@ namespace RestApi.Controllers
                     PM25 = 2.5,
                     Pressure = 1028.00,
                     Humidity = 45,
-                    DeviceMAC = "00:0A:E6:3E:FD:E3"
+                    MAC = "00:0A:E6:3E:FD:E3"
                 });
 
                 _Context.Measurements.Add(new Measurement()
@@ -78,8 +88,8 @@ namespace RestApi.Controllers
                     PM25 = 2.5,
                     Pressure = 1028.00,
                     Humidity = 45,
-                    DeviceMAC = "00:0A:E6:3E:FD:E4"
-                });    
+                    MAC = "00:0A:E6:3E:FD:E4"
+                });
 
                 _Context.SaveChanges();
             }
@@ -94,7 +104,14 @@ namespace RestApi.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Measurement>>> GetMeasurements()
         {
-            return await _Context.Measurements.OrderByDescending(m => m.DateTime).ToListAsync();
+            var measurements = await _Context.Measurements.ToListAsync();
+
+            foreach(Measurement measurement in measurements)
+            {
+                measurement.Device = _Context.Devices.Where(d => d.MAC == measurement.MAC).FirstOrDefault();
+                
+            }
+            return measurements;
         }
 
         [HttpGet("{id}")]
@@ -107,6 +124,7 @@ namespace RestApi.Controllers
                 return NotFound();
             }
 
+
             return measurement;
         }
 
@@ -117,7 +135,7 @@ namespace RestApi.Controllers
         [HttpPost("{Id}")]
         public async Task<ActionResult<Device>> EditDevice(int id, Measurement measurement)
         {
-            if (id != measurement.Id)
+            if (id != measurement.MeasurementId)
             {
                 return BadRequest();
             }
@@ -137,7 +155,7 @@ namespace RestApi.Controllers
             _Context.Measurements.Add(measurement);
             await _Context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetMeasurement), new { id = measurement.Id }, measurement);
+            return CreatedAtAction(nameof(GetMeasurement), new { id = measurement.MeasurementId }, measurement);
         }
         #endregion
 

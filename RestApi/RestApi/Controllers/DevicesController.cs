@@ -33,8 +33,10 @@ namespace RestApi.Controllers
                     Latitude = 54.519167,
                     Name = "Initial",
                     IsVerified = true,
-                    MAC = "00:0A:E6:3E:FD:E1"
+                    MAC = "00:0A:E6:3E:FD:E1"                
                 };
+
+                
 
                 _Context.Devices.Add(device);
 
@@ -80,7 +82,7 @@ namespace RestApi.Controllers
                     Latitude = 54.518502,
                     Name = "Initial4",
                     IsVerified = true,
-                    MAC = "00:0A:E6:3E:FD:E4"
+                    MAC = "00:0A:E6:3E:FD:E5"
                 });
 
                 _Context.SaveChanges();
@@ -96,7 +98,14 @@ namespace RestApi.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Device>>> GetDevices()
         {
-            return await _Context.Devices.ToListAsync();
+            var devices = await _Context.Devices.ToListAsync();
+
+            foreach(Device d in devices)
+            {
+                var measurements = _Context.Measurements.Where(m => m.MAC == d.MAC);
+                d.Measurements = measurements.ToList();
+            }
+            return devices;
         }
 
         [HttpGet("{id}")]

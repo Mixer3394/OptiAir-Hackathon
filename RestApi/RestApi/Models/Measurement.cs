@@ -9,7 +9,7 @@ namespace RestApi.Models
 {
     public class Measurement
     {
-        public int Id { get; set; }
+        public int MeasurementId { get; set; }
         public double PM1 { get; set; }
         public double PM25 { get; set; }
         public double PM10 { get; set; }
@@ -17,7 +17,9 @@ namespace RestApi.Models
         public double Humidity { get; set; }
         public double Pressure { get; set; }
         public DateTime DateTime { get; set; } = DateTime.Now;
-        public string DeviceMAC { get; set; }
+        public string MAC { get; set; }
+        //public int? DeviceId { get; set; }
+        //[ForeignKey("DeviceId")]
         public virtual Device Device { get; set; }
     }
 }
