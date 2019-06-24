@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web.Http;
 
 namespace RestApi.Controllers
 {
@@ -31,11 +32,12 @@ namespace RestApi.Controllers
             {
                 var measurement = new Measurement()
                 {
-                    PM1 = 1,
-                    PM10 = 10,
-                    PM25 = 2.5,
+                    PM1 = 3,
+                    PM10 = 5,
+                    PM25 = 4,
                     Pressure = 1028.00,
-                    Humidity = 45,
+                    Humidity = 90,
+                    Temperature = 22,
                     MAC = "00:0A:E6:3E:FD:E1"                    
                 };
 
@@ -43,54 +45,72 @@ namespace RestApi.Controllers
 
                 _Context.Measurements.Add(new Measurement()
                 {
-                    PM1 = 1,
-                    PM10 = 10,
-                    PM25 = 2.5,
-                    Pressure = 1028.00,
-                    Humidity = 45,
+                    PM1 = 3,
+                    PM10 = 6,
+                    PM25 = 5,
+                    Pressure = 1027.00,
+                    Humidity = 89,
+                    Temperature = 22,
                     MAC = "00:0A:E6:3E:FD:E0"
                 });
 
                 _Context.Measurements.Add(new Measurement()
                 {
-                    PM1 = 2.6,
-                    PM10 = 10,
-                    PM25 = 2.5,
+                    PM1 = 9,
+                    PM10 = 18,
+                    PM25 = 13,
                     Pressure = 1028.00,
-                    Humidity = 45,
+                    Humidity = 90,
+                    Temperature = 22,
                     MAC = "00:0A:E6:3E:FD:E1"
                 });
 
 
                 _Context.Measurements.Add(new Measurement()
                 {
-                    PM1 = 1,
-                    PM10 = 10,
-                    PM25 = 2.5,
-                    Pressure = 1028.00,
-                    Humidity = 45,
+                    PM1 = 2,
+                    PM10 = 3,
+                    PM25 = 4,
+                    Pressure = 1029.00,
+                    Humidity = 88,
+                    Temperature = 20,
                     MAC = "00:0A:E6:3E:FD:E2"
                 });
 
                 _Context.Measurements.Add(new Measurement()
                 {
-                    PM1 = 1,
-                    PM10 = 10,
-                    PM25 = 2.5,
-                    Pressure = 1028.00,
-                    Humidity = 45,
+                    PM1 = 5,
+                    PM10 = 4,
+                    PM25 = 3,
+                    Pressure = 1030.00,
+                    Humidity = 92,
+                    Temperature = 18,
                     MAC = "00:0A:E6:3E:FD:E3"
                 });
 
                 _Context.Measurements.Add(new Measurement()
                 {
-                    PM1 = 1,
-                    PM10 = 10,
+                    PM1 = 3,
+                    PM10 = 4,
                     PM25 = 2.5,
-                    Pressure = 1028.00,
-                    Humidity = 45,
+                    Pressure = 1026.00,
+                    Humidity = 90,
+                    Temperature = 17,
                     MAC = "00:0A:E6:3E:FD:E4"
                 });
+
+                _Context.Measurements.Add(new Measurement()
+                {
+                    PM1 = 6,
+                    PM10 = 4,
+                    PM25 = 3,
+                    Pressure = 1028.00,
+                    Humidity = 84,
+                    Temperature = 17,
+                    MAC = "d4:25:8b:e9:22:fd"
+                });
+
+           
 
                 _Context.SaveChanges();
             }
@@ -154,10 +174,19 @@ namespace RestApi.Controllers
         [HttpPost,Authorize]
         public async Task<ActionResult<Measurement>> PostMeasurement(Measurement measurement)
         {
-            _Context.Measurements.Add(measurement);
-            await _Context.SaveChangesAsync();
+            if(_Context.Devices.Where(d=>d.MAC == measurement.MAC).ToList().Count() > 0)
+            {
+                _Context.Measurements.Add(measurement);
+                await _Context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetMeasurement), new { id = measurement.MeasurementId }, measurement);
+                return CreatedAtAction(nameof(GetMeasurement), new { id = measurement.MeasurementId }, measurement);
+            }
+            else
+            {
+                return BadRequest(new BadRequestErrorMessageResult($"Unknown device ({measurement.MAC})"));
+            }
+
+
         }
         #endregion
 

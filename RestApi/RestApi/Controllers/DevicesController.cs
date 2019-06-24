@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RestApi.Contexts;
+using RestApi.Helpers;
 using RestApi.Models;
 using System;
 using System.Collections.Generic;
@@ -89,6 +90,15 @@ namespace RestApi.Controllers
                     MAC = "00:0A:E6:3E:FD:E5"
                 });
 
+                _Context.Devices.Add(new Device()
+                {
+                    Longitude = 18.52224,
+                    Latitude = 54.512502,
+                    Name = "Morski",
+                    IsVerified = true,
+                    MAC = "d4:25:8b:e9:22:fd"
+                });
+
                 _Context.SaveChanges();
             }
         }
@@ -158,15 +168,18 @@ namespace RestApi.Controllers
                 return BadRequest(badRequestErrorMessageResult);
             }
 
-            //if (!ModelState.IsValid)
-            //{
-            //    return BadRequest(ModelState);
-            //}
+            if (Validator.MacValidate(device.MAC))
+            {
+                _Context.Devices.Add(device);
+                await _Context.SaveChangesAsync();
 
-            _Context.Devices.Add(device);
-            await _Context.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetDevice), new { id = device.MAC }, device);
+                return CreatedAtAction(nameof(GetDevice), new { id = device.MAC }, device);
+            }
+            else
+            {
+                return BadRequest(new BadRequestErrorMessageResult($"Bad MAC address({device.MAC})"));
+            }
+          
         }
         #endregion
 
