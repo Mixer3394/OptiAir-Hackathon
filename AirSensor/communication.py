@@ -30,7 +30,7 @@ class Communication:
     def post_measurement(self, data):
         measurement_dict = self._create_dict_data(data)
         post_request = requests.post(self._measurement_url, json=measurement_dict, headers=self._headers)
-        if post_request.status_code < 200 or post_request.status_code > 210:
-            print(f'http failure: {post_request.status_code}')
+        post_request.raise_for_status()
+
 
 

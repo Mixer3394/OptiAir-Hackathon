@@ -8,7 +8,8 @@ def run(action):
             schedule.run_pending()
         except KeyboardInterrupt:
             exit(0)
-        # except:
-            # logging.critical('Critical error occured')    
+        except Exception as e:
+            logging.getLogger().fatal(f'Fatal error: {e}')
+            exit(-1)
 
 

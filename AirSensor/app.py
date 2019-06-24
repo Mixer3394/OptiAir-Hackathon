@@ -3,6 +3,7 @@ import argparse
 def parse_args():
     parser = argparse.ArgumentParser(description='Receives data from connected sensors and transmits them to OptiAir server.')
     parser.add_argument('--url', type=str, help='Server URL.', default='https://optiair.azurewebsites.net/api/', required=False)
+    parser.add_argument('--verbose', type=bool, help='Display every information available.', default=False, required=False)
     return parser.parse_args()
 
 args = parse_args()
@@ -25,3 +26,4 @@ communication = communication.Communication(args.url)
 
 import common_app
 app = common_app.CommonApp(air_sensor, communication, args)
+app.start()
