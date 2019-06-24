@@ -1,7 +1,13 @@
 <template>
   <div id="AddDevice" class="add-device" >
     <div class="form-group">
-        
+        <font-awesome-icon style="float:right" icon="times-circle" @click="$emit('close','')" />
+        <div v-if="isAlready" class="alert alert-danger" role="alert">
+            To urządzenie już jest zarejestrowane!
+        </div>
+        <div v-if="isDone" class="alert alert-success" role="alert">
+            Udalo się!
+        </div>
         <label for="exampleInputPassword1">Nazwa</label>
         <input type="text" class="form-control" v-model="name" placeholder="Stocznia">
         <label for="exampleInputPassword1">Adres MAC</label>
@@ -19,6 +25,8 @@ const Info = Vue.extend({
     props: ["location"],
   data(){
         return{
+            isAlready: false,
+            isDone: false,
             hide:false,
             mcadress:"",
             name: ""     
@@ -54,10 +62,20 @@ const Info = Vue.extend({
             headers: {
                 'Content-Type': 'application/json'
             },
-        }).then(function (response) {
+        }).then((response) => {
             console.log(response);
-        }).catch(function (error) {
-            console.log(error.message);
+            
+                this.isDone = true;
+            setTimeout(()=>{
+                this.$emit("close", "");
+            }, 2000)
+        }).catch((error) => {
+            if(error.message.indexOf("400")>=0){
+                this.isAlready = true;
+                setTimeout(()=>{
+                    this.isAlready = false;
+                },3000);
+            }
         });
     }   
   }  ,

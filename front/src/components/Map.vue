@@ -90,6 +90,7 @@ const Map = Vue.extend({
             but.addEventListener("click", function(e){
                 let atr = this.getAttribute("data-latlng").split(" ");
                 _th.$emit("AddDevice", {lat: atr[0], lng: atr[1]});
+                if($(".leaflet-popup-close-button").length>0) $(".leaflet-popup-close-button")[0].click();
             }, false)
             but.innerText = "Dodaj nowe urządzenie";
             this.model.map.on('contextmenu',(e) => {

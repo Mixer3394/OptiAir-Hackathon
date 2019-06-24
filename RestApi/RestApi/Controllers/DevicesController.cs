@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RestApi.Contexts;
 using RestApi.Models;
@@ -128,7 +129,7 @@ namespace RestApi.Controllers
 
         #region PUT
 
-        [HttpPost("{Id}")]
+        [HttpPost("{Id}"), Authorize]
         public async Task<ActionResult<Device>>  EditDevice(int id, Device device)
         {
             //if(id != device.Id)
@@ -146,15 +147,21 @@ namespace RestApi.Controllers
         #endregion
 
         #region POST
-        [HttpPost]
+        [HttpPost, Authorize]
         public async Task<ActionResult<Device>> PostDevice(Device device)
         {
+            
             if (_Context.Devices.Where(d => d.MAC == device.MAC).ToList().Count() > 0)
             {
                 BadRequestErrorMessageResult badRequestErrorMessageResult = new BadRequestErrorMessageResult($"This MAC address({device.MAC}) is already used");
 
                 return BadRequest(badRequestErrorMessageResult);
             }
+
+            //if (!ModelState.IsValid)
+            //{
+            //    return BadRequest(ModelState);
+            //}
 
             _Context.Devices.Add(device);
             await _Context.SaveChangesAsync();
@@ -165,7 +172,7 @@ namespace RestApi.Controllers
 
         #region DELETE
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}"), Authorize]
         public async Task<IActionResult> DeleteDevice(int id)
         {
             var device = await _Context.Devices.FindAsync(id);
