@@ -22,6 +22,7 @@ class CommonApp:
         format="%(asctime)s [%(levelname)-5.5s] %(message)s",
         handlers=[logging.FileHandler(f'{os.getcwd()}/client.log'), logging.StreamHandler()]
         )
+        logging.getLogger().info('Logger initialized.')
         
     def _login(self):
         """
@@ -31,6 +32,7 @@ class CommonApp:
         while True:
             try:
                 self._communication.login()
+                logging.getLogger().info('Logged in')
             except KeyboardInterrupt:
                 exit(0)
             except requests.HTTPError as http_exception:

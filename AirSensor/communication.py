@@ -42,6 +42,3 @@ class Communication:
         measurement_dict = self._create_dict_data(data)
         post_request = requests.post(self._measurement_url(), json=measurement_dict, headers=self._headers)
         post_request.raise_for_status()
-
-
-
