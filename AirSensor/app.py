@@ -1,11 +1,16 @@
-import schedule
+import argparse
+
+def parse_args():
+    parser = argparse.ArgumentParser(description='Receives data from connected sensors and transmits them to OptiAir server.')
+    parser.add_argument('--url', type=str, help='Server URL.', default='https://optiair.azurewebsites.net/api/', required=False)
+    return parser.parse_args()
+
+args = parse_args()
+
 import pms7003
 import si7021
 import pressure_sensor
 import airsensor
-import communication
-
-url = 'https://optiair.azurewebsites.net/api/'
 
 # Used sensors
 dust_sensor = pms7003.Pms7003Sensor('/dev/ttyS0')
@@ -14,20 +19,9 @@ humid_sensor = temp_sensor
 pressure_sensor = pressure_sensor.MockBme280Sensor()
 # Sensors decorator
 air_sensor = airsensor.AirSensor(dust_sensor, temp_sensor, humid_sensor, pressure_sensor)
-# Communication
-communication = communication.Communication(url)
 
+import communication
+communication = communication.Communication(args.url)
 
-def gather_data_and_send():
-    data = air_sensor.get_readout()
-    communication.post_measurement(data)
-
-
-schedule.every(10).seconds.do(gather_data_and_send)
-
-while True:
-    try:
-        schedule.run_pending()
-        # time.sleep(1)
-    except KeyboardInterrupt:
-        exit(0)
+import common_app
+app = common_app.CommonApp(air_sensor, communication, args)

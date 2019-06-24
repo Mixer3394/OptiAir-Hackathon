@@ -12,8 +12,8 @@ class Communication:
 
     def _get_mac(self):
         if self._mac == '':
-            import netifaces
-            self._mac = netifaces.ifaddresses('wlan0')[netifaces.AF_LINK][0]['addr']
+            import getmac
+            self._mac = getmac.get_mac_address()
         return self._mac
 
     def _create_dict_data(self, data):

@@ -1,5 +1,14 @@
 import measurement
 
+class MockAirSensor:
+
+    def __init__(self, pm1_0, pm2_5, pm10, temp, humid, pressure):
+        self._measurement = measurement.Measurement(pm1_0, pm2_5, pm10, temp, humid, pressure)
+
+    def get_readout(self):
+         return self._measurement
+
+
 class AirSensor:
 
     def __init__(self, dust_sensor, temp_sensor, humidity_sensor, pressure_sensor):
