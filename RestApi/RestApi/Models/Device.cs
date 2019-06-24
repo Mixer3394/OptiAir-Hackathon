@@ -9,8 +9,9 @@ namespace RestApi.Models
 {
     public class Device
     {
-        public int Id { get; set; }
+        //public int DeviceId { get; set; }
         //[Required]
+        [Key]
         public string MAC { get; set; }
         //[Required]
         public string Name { get; set; }
@@ -18,7 +19,7 @@ namespace RestApi.Models
         public double Latitude { get; set; }
         //[Required]
         public double Longitude { get; set; }
-        public bool IsVerify { get; set; } = false;
+        public bool IsVerified { get; set; } = false;
 
         public virtual List<Measurement> Measurements { get; set; }
 

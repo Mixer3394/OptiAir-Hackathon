@@ -11,9 +11,30 @@ namespace RestApi.Contexts
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlite("Filename=OptiAirDatabse.db");
+            optionsBuilder.UseSqlite("Filename=OptiAirDatabse.db"/*, x => x.SuppressForeignKeyEnforcement()*/);
+            //UseSqlite($"Filename={databaseName}", x => x.SuppressForeignKeyEnforcement());
         }
 
+        public DbSet<Device> Devices
+        {
+            get;
+            set;
+        }
+        public DbSet<Measurement> Measurements { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            //modelBuilder.Entity<Measurement>()
+            //    .HasOne(m => m.Device)
+            //    .WithMany(d => d.Measurements)
+            //    .HasForeignKey(m => m.MAC);
+
+            modelBuilder.Entity<Measurement>()
+                .HasOne<Device>()
+                .WithMany()
+                .HasForeignKey(m => m.MAC);
+
+        }
         //protected override void OnModelCreating(ModelBuilder modelBuilder)
         //{
         //    //modelBuilder.Entity<Measurement>()
@@ -47,7 +68,6 @@ namespace RestApi.Contexts
         //    //    base.OnModelCreating(modelBuilder);
         //}
 
-    public DbSet<Device> Devices { get; set; }
-        public DbSet<Measurement> Measurements { get; set; }
+
     }
 }
