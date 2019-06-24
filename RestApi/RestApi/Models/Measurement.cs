@@ -12,10 +12,10 @@ namespace RestApi.Models
         public double PM25 { get; set; }
         public double PM10 { get; set; }
         public double Temperature { get; set; }
-        public double Damp { get; set; }
-        public double Preasure { get; set; }
+        public double Humidity { get; set; }
+        public double Pressure { get; set; }
         public DateTime DateTime { get; set; } = DateTime.Now;
-        public int DeviceId { get; set; }
+        public string DeviceMAC { get; set; }
         public virtual Device Device { get; set; }
     }
 }

@@ -33,9 +33,9 @@ namespace RestApi.Controllers
                     PM1 = 1,
                     PM10 = 10,
                     PM25 = 2.5,
-                    Preasure = 1028.00,
-                    Damp = 45,
-                    DeviceId = 1
+                    Pressure = 1028.00,
+                    Humidity = 45,
+                    DeviceMAC = "00:0A:E6:3E:FD:E1"
                 };
 
                 _Context.Measurements.Add(measurement);
@@ -73,22 +73,19 @@ namespace RestApi.Controllers
 
         #region PUT
 
+        [HttpPost("{Id}")]
+        public async Task<ActionResult<Device>> EditDevice(int id, Measurement measurement)
+        {
+            if (id != measurement.Id)
+            {
+                return BadRequest();
+            }
 
+            _Context.Entry(measurement).State = EntityState.Modified;
+            await _Context.SaveChangesAsync();
 
-        //[HttpPost("{Id}")]
-        //public async Task<ActionResult<Device>> EditDevice(int id, Device device)
-        //{
-        //    if (id != device.Id)
-        //    {
-        //        return BadRequest();
-        //    }
-
-        //    _Context.Entry(device).State = EntityState.Modified;
-        //    await _Context.SaveChangesAsync();
-
-        //    return NoContent();
-
-        //}
+            return NoContent();
+        }
 
         #endregion
 
@@ -103,25 +100,25 @@ namespace RestApi.Controllers
         }
         #endregion
 
-        //#region DELETE
+        #region DELETE
 
-        //[HttpDelete("{id}")]
-        //public async Task<IActionResult> DeleteDevice(int id)
-        //{
-        //    var device = await _Context.Devices.FindAsync(id);
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteMeasurement(int id)
+        {
+            var measurement = await _Context.Measurements.FindAsync(id);
 
-        //    if (device == null)
-        //    {
-        //        return NotFound();
-        //    }
+            if (measurement == null)
+            {
+                return NotFound();
+            }
 
-        //    _Context.Devices.Remove(device);
-        //    await _Context.SaveChangesAsync();
+            _Context.Measurements.Remove(measurement);
+            await _Context.SaveChangesAsync();
 
-        //    return NoContent();
-        //}
+            return NoContent();
+        }
 
-        //#endregion
+        #endregion
 
         #endregion
 

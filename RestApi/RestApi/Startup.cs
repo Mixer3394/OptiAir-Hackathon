@@ -21,6 +21,8 @@ namespace RestApi
 
             using (var client = new OptiAirDbContext())
             {
+                client.Database.EnsureDeleted();
+
                 client.Database.EnsureCreated();
             }
         }

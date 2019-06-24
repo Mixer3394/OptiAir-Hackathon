@@ -12,6 +12,8 @@ namespace RestApi.Models
         [Required]
         public string Name { get; set; }
         [Required]
+        public string MAC { get; set; }
+        [Required]
         public double Latitude { get; set; }
         [Required]
         public double Longitude { get; set; }

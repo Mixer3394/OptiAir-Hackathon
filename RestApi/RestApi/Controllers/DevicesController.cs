@@ -32,7 +32,8 @@ namespace RestApi.Controllers
                     Longitude = 54.519167,
                     Latitude = 18.539444,
                     Name = "Initial",
-                    IsVerify = true
+                    IsVerify = true,
+                    MAC = "00:0A:E6:3E:FD:E1"
                 };
 
                 _Context.Devices.Add(device);
@@ -54,7 +55,7 @@ namespace RestApi.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Device>> GetTodoItem(int id)
+        public async Task<ActionResult<Device>> GetDevice(int id)
         {
             var device = await _Context.Devices.FindAsync(id);
 
@@ -94,7 +95,7 @@ namespace RestApi.Controllers
             _Context.Devices.Add(device);
             await _Context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetDevices), new { id = device.Id }, device);
+            return CreatedAtAction(nameof(GetDevice), new { id = device.Id }, device);
         }
         #endregion
 
