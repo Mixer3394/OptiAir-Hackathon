@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RestApi.Contexts;
+using RestApi.Helpers;
 using RestApi.Models;
 using System;
 using System.Collections.Generic;
@@ -88,6 +90,15 @@ namespace RestApi.Controllers
                     MAC = "00:0A:E6:3E:FD:E5"
                 });
 
+                _Context.Devices.Add(new Device()
+                {
+                    Longitude = 18.52224,
+                    Latitude = 54.512502,
+                    Name = "Morski",
+                    IsVerified = true,
+                    MAC = "d4:25:8b:e9:22:fd"
+                });
+
                 _Context.SaveChanges();
             }
         }
@@ -128,7 +139,7 @@ namespace RestApi.Controllers
 
         #region PUT
 
-        [HttpPost("{Id}")]
+        [HttpPost("{Id}"), Authorize]
         public async Task<ActionResult<Device>>  EditDevice(int id, Device device)
         {
             //if(id != device.Id)
@@ -146,9 +157,10 @@ namespace RestApi.Controllers
         #endregion
 
         #region POST
-        [HttpPost]
+        [HttpPost, Authorize]
         public async Task<ActionResult<Device>> PostDevice(Device device)
         {
+            
             if (_Context.Devices.Where(d => d.MAC == device.MAC).ToList().Count() > 0)
             {
                 BadRequestErrorMessageResult badRequestErrorMessageResult = new BadRequestErrorMessageResult($"This MAC address({device.MAC}) is already used");
@@ -156,16 +168,24 @@ namespace RestApi.Controllers
                 return BadRequest(badRequestErrorMessageResult);
             }
 
-            _Context.Devices.Add(device);
-            await _Context.SaveChangesAsync();
+            if (Validator.MacValidate(device.MAC))
+            {
+                _Context.Devices.Add(device);
+                await _Context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetDevice), new { id = device.MAC }, device);
+                return CreatedAtAction(nameof(GetDevice), new { id = device.MAC }, device);
+            }
+            else
+            {
+                return BadRequest(new BadRequestErrorMessageResult($"Bad MAC address({device.MAC})"));
+            }
+          
         }
         #endregion
 
         #region DELETE
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}"), Authorize]
         public async Task<IActionResult> DeleteDevice(int id)
         {
             var device = await _Context.Devices.FindAsync(id);

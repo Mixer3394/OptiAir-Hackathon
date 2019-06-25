@@ -13,7 +13,7 @@ class Communication:
         return self._url + 'measurements/'
 
     def _login_url(self):
-        return self._url + 'devices/login/'
+        return self._url + 'token/device/'
 
     def _get_mac(self):
         if self._mac == '':
@@ -29,14 +29,17 @@ class Communication:
         measurement['temperature'] = data.temp
         measurement['humidity'] = data.humid
         measurement['pressure'] = data.pressure
-        measurement['deviceMAC'] = self._get_mac()
+        measurement['MAC'] = self._get_mac()
         return measurement
 
     def login(self):
         login_data = {}
-        login_data['deviceMAC'] = self._get_mac()
+        login_data['MAC'] = self._get_mac()
         login_request = requests.post(self._login_url(), json=login_data, headers=self._headers)
         login_request.raise_for_status()
+
+        token = json.loads(login_request.content)['token']
+        self._headers['Authorization'] = f'bearer {token}'
 
     def post_measurement(self, data):
         measurement_dict = self._create_dict_data(data)

@@ -33,6 +33,7 @@ class CommonApp:
             try:
                 self._communication.login()
                 logging.getLogger().info('Logged in')
+                break
             except KeyboardInterrupt:
                 exit(0)
             except requests.HTTPError as http_exception:
