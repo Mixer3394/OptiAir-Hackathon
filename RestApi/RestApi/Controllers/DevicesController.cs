@@ -43,61 +43,61 @@ namespace RestApi.Controllers
 
 
 
-            //    _Context.Devices.Add(device);
+                //    _Context.Devices.Add(device);
 
-            //    _Context.Devices.Add(new Device()
-            //    {
-            //        Longitude = 18.538709,
-            //        Latitude = 54.521048,
-            //        Name = "Initial1",
-            //        IsVerified = true,
-            //        MAC = "00:0A:E6:3E:FD:E0"
-            //    });
+                //    _Context.Devices.Add(new Device()
+                //    {
+                //        Longitude = 18.538709,
+                //        Latitude = 54.521048,
+                //        Name = "Initial1",
+                //        IsVerified = true,
+                //        MAC = "00:0A:E6:3E:FD:E0"
+                //    });
 
-            //    _Context.Devices.Add(new Device()
-            //    {
-            //        Longitude = 18.5419,
-            //        Latitude = 54.517392,
-            //        Name = "Initial2",
-            //        IsVerified = true,
-            //        MAC = "00:0A:E6:3E:FD:E2"
-            //    });
+                //    _Context.Devices.Add(new Device()
+                //    {
+                //        Longitude = 18.5419,
+                //        Latitude = 54.517392,
+                //        Name = "Initial2",
+                //        IsVerified = true,
+                //        MAC = "00:0A:E6:3E:FD:E2"
+                //    });
 
-            //    _Context.Devices.Add(new Device()
-            //    {
-            //        Longitude = 18.534997,
-            //        Latitude = 54.517562,
-            //        Name = "Initial3",
-            //        IsVerified = true,
-            //        MAC = "00:0A:E6:3E:FD:E3"
-            //    });
+                //    _Context.Devices.Add(new Device()
+                //    {
+                //        Longitude = 18.534997,
+                //        Latitude = 54.517562,
+                //        Name = "Initial3",
+                //        IsVerified = true,
+                //        MAC = "00:0A:E6:3E:FD:E3"
+                //    });
 
-            //    _Context.Devices.Add(new Device()
-            //    {
-            //        Longitude = 18.530847,
-            //        Latitude = 54.521819,
-            //        Name = "Initial4",
-            //        IsVerified = true,
-            //        MAC = "00:0A:E6:3E:FD:E4"
-            //    });
+                //    _Context.Devices.Add(new Device()
+                //    {
+                //        Longitude = 18.530847,
+                //        Latitude = 54.521819,
+                //        Name = "Initial4",
+                //        IsVerified = true,
+                //        MAC = "00:0A:E6:3E:FD:E4"
+                //    });
 
-            //    _Context.Devices.Add(new Device()
-            //    {
-            //        Longitude = 18.52824,
-            //        Latitude = 54.518502,
-            //        Name = "Initial4",
-            //        IsVerified = true,
-            //        MAC = "00:0A:E6:3E:FD:E5"
-            //    });
+                //    _Context.Devices.Add(new Device()
+                //    {
+                //        Longitude = 18.52824,
+                //        Latitude = 54.518502,
+                //        Name = "Initial4",
+                //        IsVerified = true,
+                //        MAC = "00:0A:E6:3E:FD:E5"
+                //    });
 
-            //    _Context.Devices.Add(new Device()
-            //    {
-            //        Longitude = 18.52224,
-            //        Latitude = 54.512502,
-            //        Name = "Morski",
-            //        IsVerified = true,
-            //        MAC = "d4:25:8b:e9:22:fd"
-            //    });
+                //    _Context.Devices.Add(new Device()
+                //    {
+                //        Longitude = 18.52224,
+                //        Latitude = 54.512502,
+                //        Name = "Morski",
+                //        IsVerified = true,
+                //        MAC = "d4:25:8b:e9:22:fd"
+                //    });
 
             //    _Context.SaveChanges();
             //}
@@ -116,7 +116,7 @@ namespace RestApi.Controllers
 
             foreach(Device d in devices)
             {
-                var measurements = _Context.Measurements.Where(m => m.MAC == d.MAC).TakeLast.ToList();
+                var measurements = _Context.Measurements.Where(m => m.MAC == d.MAC).ToList().TakeLast(1);
                 d.Measurements = measurements.ToList();
             }
             return devices;
@@ -135,17 +135,36 @@ namespace RestApi.Controllers
             return device;
         }
 
+        [HttpPost("between")]
+        public async Task<ActionResult<IEnumerable<Device>>> GetDevices([FromBody]DataBetween data)
+        {
+            DateTime date = DateTime.ParseExact(data.DateTime, "yyyyMMddHHmm",
+                                          System.Globalization.CultureInfo.InvariantCulture);
+
+
+            var devices = await _Context.Devices.ToListAsync();
+
+            //var date = data.DateTime;
+
+            foreach (Device d in devices)
+            {
+                var measurements = _Context.Measurements.Where(m => m.MAC == d.MAC).Where(m => (m.DateTime >= date.AddHours(-1)) && (m.DateTime <= date)).ToList().TakeLast(1);
+                d.Measurements = measurements.ToList();
+            }
+            return devices.Where(x => x.Measurements.Count() > 0).ToList();
+        }
+
         #endregion
 
         #region PUT
 
-        [HttpPost("{Id}"), Authorize]
-        public async Task<ActionResult<Device>>  EditDevice(int id, Device device)
+        [HttpPut("{MAC}"), Authorize]
+        public async Task<ActionResult<Device>>  EditDevice(string mac, Device device)
         {
-            //if(id != device.Id)
-            //{
-            //    return BadRequest();
-            //}
+            if (mac != device.MAC)
+            {
+                return BadRequest();
+            }
 
             _Context.Entry(device).State = EntityState.Modified;
             await _Context.SaveChangesAsync();
@@ -185,10 +204,10 @@ namespace RestApi.Controllers
 
         #region DELETE
 
-        [HttpDelete("{id}"), Authorize]
-        public async Task<IActionResult> DeleteDevice(int id)
+        [HttpDelete("{MAC}"), Authorize]
+        public async Task<IActionResult> DeleteDevice(string mac)
         {
-            var device = await _Context.Devices.FindAsync(id);
+            var device = await _Context.Devices.FindAsync(mac);
 
             if (device == null)
             {
@@ -204,5 +223,10 @@ namespace RestApi.Controllers
         #endregion
 
         #endregion
+    }
+
+    public class DataBetween
+    {
+        public string DateTime { get; set; }
     }
 }
