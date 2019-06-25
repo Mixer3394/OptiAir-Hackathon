@@ -21,7 +21,7 @@
 import Vue from "vue";
 
 const Info = Vue.extend({
-    props: ["measurement", "test"],
+    props: ["measurement", "hidethis"],
   data(){
         return{
             hide:false        
@@ -33,6 +33,10 @@ const Info = Vue.extend({
   watch: { 
         measurement: function(newVal, oldVal) {
             this.hide=false;
+        },
+        hidethis(newVal, oldVal){
+            if(oldVal)
+                this.hide=true;
         }
     }
 })

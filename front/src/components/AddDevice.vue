@@ -22,7 +22,7 @@ import Vue from "vue";
 import axios from "axios";
 
 const Info = Vue.extend({
-    props: ["location"],
+    props: ["location", "token"],
   data(){
         return{
             isAlready: false,
@@ -46,7 +46,7 @@ const Info = Vue.extend({
         //     });
 
 
-        console.log(this.$props.location);
+        console.log(this.$props.token);
 
         axios({
             method: 'post',
@@ -60,7 +60,8 @@ const Info = Vue.extend({
                     "isVerified": true
                     },
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': 'bearer '+ this.$props.token
             },
         }).then((response) => {
             console.log(response);

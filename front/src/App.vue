@@ -1,8 +1,9 @@
 <template>
   <div id="app" class="app">
-    <Map  :markers="markers" @chooseMarker='measurement = $event' @AddDevice="addDeviceLocation=$event;isAddDevice=true"/>
+    <Map  @closeAddDevice="isAddDevice=false" :asAdmin="asAdmin" :markers="markers" @chooseMarker='measurement = $event' @AddDevice="addDeviceLocation=$event;isAddDevice=true"/>
     <Info @hide="hideInfo = true"   :measurement="measurement"  />
-    <AddDevice v-if="isAddDevice" :location="addDeviceLocation" @close="isAddDevice=false" />
+    <AddDevice :token="token" v-if="isAddDevice" :location="addDeviceLocation" @close="isAddDevice=false" />
+    <AdminPanel v-if="!asAdmin" @login="login($event)" />
   </div>
 </template>
 
@@ -11,6 +12,7 @@ import HelloWorld from './components/HelloWorld.vue'
 import Map from "./components/Map";
 import Info from "./components/Info";
 import AddDevice from "./components/AddDevice";
+import AdminPanel from "./components/AdminPanel"
 
 import axios from "axios";
 
@@ -19,12 +21,15 @@ export default {
   components: {
     Map,
     Info,
-    AddDevice
+    AddDevice,
+    AdminPanel
   },
   data(){
     return{
         isAddDevice:false,
         addDeviceLocation:{},
+        asAdmin:false,
+        token:"",
         measurement: [
            {
                 name: "Pm1",
@@ -49,8 +54,19 @@ export default {
       markers:[]
     }
   },
+  methods:{
+    login(e){
+      console.log("login inner");
+        this.asAdmin = true;
+        this.token = e;
+    }
+  },
   created(){
-
+    let login = getCookie("login");
+    if(login!=undefined){
+      this.asAdmin = true;
+      this.token = login; 
+    }
     axios.get("https://optiair.azurewebsites.net/api/devices",
     {
       headers: {"Access-Control-Allow-Origin": "*"},
