@@ -7,17 +7,43 @@
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://seiyria.com/bootstrap-slider/css/bootstrap-slider.css">
     <title>OptiAir - to be clear</title>
     <style>
       .hidden{
           opacity: 0 !important;
       }
+      #ex1Slider .slider-selection {
+	/* background: #BABABA; */
+  width: 100%;
+}
+.slider.slider-horizontal{
+  width:calc(100% - 100px);
+  margin: 0px;
+  position: fixed;
+  z-index: 999;
+  bottom: 30px;
+  left: 50px;;
+}
     </style>
   </head>
   <body>
     <noscript>
       <strong>We're sorry but front doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
+    <input id="ex1"
+    onchange="changeInput()"
+    type="text"
+    data-provide="slider"
+    data-slider-ticks="[1, 2, 3, 4, 5, 6, 7]"
+    data-slider-ticks-labels='["-06:00", "-05:00", "-04:00", "-03:00", "-02:00", "-01:00", "Teraz"]'
+    data-slider-min="1"
+    data-slider-max="3"
+    data-slider-step="1"
+    data-slider-value="7"
+    data-slider-tooltip="hide"
+    
+    />
     <div id="app"></div>
     <script>
       /*
@@ -47,5 +73,20 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script src="https://seiyria.com/bootstrap-slider/js/bootstrap-slider.js"></script>
+    <script>
+      SUPERVAL = document.getElementById("ex1").value;
+      SUPERVAL = 7;
+
+      function changeInput(){
+        SUPERVAL = document.getElementById("ex1").value;
+        console.log(document.getElementById("ex1").value)
+      }
+    // var slider = new Slider('#ex1', {
+    //   formatter: function(value) {
+    //     return 'Current value: ' + value;
+    //   }
+    // });
+    </script>
   </body>
 </html>

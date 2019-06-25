@@ -234,6 +234,7 @@ const Map = Vue.extend({
 
                 let color = '#'+R  +G  +'77';
                 console.log(color);
+                if(markerInfo.measurements[0]==undefined) color = "333333";
                 var circle = L.circle([markerInfo.latitude, markerInfo.longitude], {
                     color: 'red',
                     fillColor: color,

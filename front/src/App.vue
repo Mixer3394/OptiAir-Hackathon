@@ -61,9 +61,20 @@ export default {
         this.token = e;
     },
     getData(){
+      // axios.get("https://optiair.azurewebsites.net/api/devices/between/",
+      
+        console.log(SUPERVAL);
+      if(SUPERVAL == 7){
+        
       axios.get("https://optiair.azurewebsites.net/api/devices",
       {
-        headers: {"Access-Control-Allow-Origin": "*"},
+        data:{
+          "DateTime": "201906250626"
+        },
+
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+        'Content-Type': 'application/json'},
         crossdomain: true,
       })
       .then( response =>{
@@ -71,6 +82,47 @@ export default {
         console.table(response.data);
         this.markers = response.data;
       })
+      
+      }
+      else{
+        
+
+
+        let today = new Date(); 
+        let hours = today.getHours()-2 - (7-SUPERVAL);
+        if(hours<10)
+          hours = "0"+hours;
+        
+        let minutes = today.getMinutes();
+        if(minutes <10)
+          minutes = "0"+minutes;
+
+
+        axios({
+              method: 'post',
+              url: "https://optiair.azurewebsites.net/api/devices/between/",
+              data: {
+                      "DateTime": today.toJSON().slice(0,10).replace("-","").replace("-","")+hours+minutes
+                      },
+              headers: {
+                  'Content-Type': 'application/json'
+              },
+          }).then((response) => {
+              console.log("LOG IN");
+              console.table(response.data);
+              this.markers = response.data;
+              
+          }).catch((error) => {
+              // if(error.message.indexOf("400")>=0){
+                  // this.alert = true;
+                  // setTimeout(()=>{
+                  //     this.alert = false;
+                  // },3000);
+              // }
+          });
+        
+      }
+
     }
   },
   created(){
@@ -83,7 +135,7 @@ export default {
     setInterval(()=>{
 
       this.getData();
-    },5000)
+    },1000)
   },
   mounted(){
     console.log(this.measurement);
