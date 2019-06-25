@@ -3,10 +3,9 @@
     <font-awesome-icon class="icon-btn" icon="bars" @click="hide=!hide" />
     <div v-if="!hide" class="form-group login-form">
         <font-awesome-icon style="float:right; cursor:pointer;" icon="times-circle" @click="hide = true" />
-        <div v-if="alert" class="alert alert-danger" role="alert">
-            Logowanie nie udało się!
+        <!-- <div class="alert alert-danger" role="alert">
+            To urządzenie już jest zarejestrowane!
         </div>
-        <!-- 
         <div  class="alert alert-success" role="alert">
             Udalo się!
         </div> -->
@@ -29,8 +28,7 @@ const AdminPanel = Vue.extend({
         return{
             hide:true,
             login:"",
-            pass:"",
-            alert:false        
+            pass:""        
         }
   },
   created(){
@@ -57,10 +55,10 @@ const AdminPanel = Vue.extend({
             
         }).catch((error) => {
             // if(error.message.indexOf("400")>=0){
-                this.alert = true;
-                setTimeout(()=>{
-                    this.alert = false;
-                },3000);
+            //     this.isAlready = true;
+            //     setTimeout(()=>{
+            //         this.isAlready = false;
+            //     },3000);
             // }
         });
 

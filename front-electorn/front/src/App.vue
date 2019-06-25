@@ -2,7 +2,7 @@
   <div id="app" class="app">
     <Map  @closeAddDevice="isAddDevice=false" :asAdmin="asAdmin" :markers="markers" @chooseMarker='measurement = $event' @AddDevice="addDeviceLocation=$event;isAddDevice=true"/>
     <Info @hide="hideInfo = true"   :measurement="measurement"  />
-    <AddDevice :token="token" v-if="isAddDevice" :location="addDeviceLocation" @close="isAddDevice=false;getData()" />
+    <AddDevice :token="token" v-if="isAddDevice" :location="addDeviceLocation" @close="isAddDevice=false" />
     <AdminPanel v-if="!asAdmin" @login="login($event)" />
   </div>
 </template>
@@ -59,18 +59,6 @@ export default {
       console.log("login inner");
         this.asAdmin = true;
         this.token = e;
-    },
-    getData(){
-      axios.get("https://optiair.azurewebsites.net/api/devices",
-      {
-        headers: {"Access-Control-Allow-Origin": "*"},
-        crossdomain: true,
-      })
-      .then( response =>{
-        console.clear();
-        console.table(response.data);
-        this.markers = response.data;
-      })
     }
   },
   created(){
@@ -78,12 +66,16 @@ export default {
     if(login!=undefined){
       this.asAdmin = true;
       this.token = login; 
-    }     
-    this.getData();
-    setInterval(()=>{
-
-      this.getData();
-    },5000)
+    }
+    axios.get("https://optiair.azurewebsites.net/api/devices",
+    {
+      headers: {"Access-Control-Allow-Origin": "*"},
+      crossdomain: true,
+    })
+    .then( response =>{
+      console.table(response.data);
+      this.markers = response.data;
+    }) 
   },
   mounted(){
     console.log(this.measurement);
@@ -109,7 +101,7 @@ body{
   padding: 0px;
   margin: 0px;
 }
-/* path.leaflet-interactive, */
+path.leaflet-interactive,
 .leaflet-marker-icon,
 .leaflet-marker-shadow {
   -webkit-animation: fadein 3s; /* Safari, Chrome and Opera > 12.1 */
