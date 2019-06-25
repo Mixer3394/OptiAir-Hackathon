@@ -2,7 +2,7 @@
   <div id="app" class="app">
     <Map  @closeAddDevice="isAddDevice=false" :asAdmin="asAdmin" :markers="markers" @chooseMarker='measurement = $event' @AddDevice="addDeviceLocation=$event;isAddDevice=true"/>
     <Info @hide="hideInfo = true"   :measurement="measurement"  />
-    <AddDevice :token="token" v-if="isAddDevice" :location="addDeviceLocation" @close="isAddDevice=false;getData()" />
+    <AddDevice :token="token" v-if="isAddDevice" :location="addDeviceLocation" @close="isAddDevice=false" />
     <AdminPanel v-if="!asAdmin" @login="login($event)" />
   </div>
 </template>
@@ -59,70 +59,6 @@ export default {
       console.log("login inner");
         this.asAdmin = true;
         this.token = e;
-    },
-    getData(){
-      // axios.get("https://optiair.azurewebsites.net/api/devices/between/",
-      
-        console.log(SUPERVAL);
-      if(SUPERVAL == 7){
-        
-      axios.get("https://optiair.azurewebsites.net/api/devices",
-      {
-        data:{
-          "DateTime": "201906250626"
-        },
-
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-        'Content-Type': 'application/json'},
-        crossdomain: true,
-      })
-      .then( response =>{
-        console.clear();
-        console.table(response.data);
-        this.markers = response.data;
-      })
-      
-      }
-      else{
-        
-
-
-        let today = new Date(); 
-        let hours = today.getHours()-2 - (7-SUPERVAL);
-        if(hours<10)
-          hours = "0"+hours;
-        
-        let minutes = today.getMinutes();
-        if(minutes <10)
-          minutes = "0"+minutes;
-
-
-        axios({
-              method: 'post',
-              url: "https://optiair.azurewebsites.net/api/devices/between/",
-              data: {
-                      "DateTime": today.toJSON().slice(0,10).replace("-","").replace("-","")+hours+minutes
-                      },
-              headers: {
-                  'Content-Type': 'application/json'
-              },
-          }).then((response) => {
-              console.log("LOG IN");
-              console.table(response.data);
-              this.markers = response.data;
-              
-          }).catch((error) => {
-              // if(error.message.indexOf("400")>=0){
-                  // this.alert = true;
-                  // setTimeout(()=>{
-                  //     this.alert = false;
-                  // },3000);
-              // }
-          });
-        
-      }
-
     }
   },
   created(){
@@ -130,12 +66,16 @@ export default {
     if(login!=undefined){
       this.asAdmin = true;
       this.token = login; 
-    }     
-    this.getData();
-    setInterval(()=>{
-
-      this.getData();
-    },1000)
+    }
+    axios.get("https://optiair.azurewebsites.net/api/devices",
+    {
+      headers: {"Access-Control-Allow-Origin": "*"},
+      crossdomain: true,
+    })
+    .then( response =>{
+      console.table(response.data);
+      this.markers = response.data;
+    }) 
   },
   mounted(){
     console.log(this.measurement);
@@ -161,7 +101,7 @@ body{
   padding: 0px;
   margin: 0px;
 }
-/* path.leaflet-interactive, */
+path.leaflet-interactive,
 .leaflet-marker-icon,
 .leaflet-marker-shadow {
   -webkit-animation: fadein 3s; /* Safari, Chrome and Opera > 12.1 */

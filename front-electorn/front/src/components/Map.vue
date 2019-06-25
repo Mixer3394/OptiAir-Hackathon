@@ -23,8 +23,7 @@ const Map = Vue.extend({
                     x: 54.52632533704946,  
                     y: 18.507049403926203
                 }],
-                mapMarkers:[],
-                mapMarkersB:[],
+                mapMarkers:[]
                 
             }
             
@@ -200,18 +199,17 @@ const Map = Vue.extend({
   },
   watch: { 
         markers: function(newVal, oldVal) {
-            //alert("1");
-            for(let markerElement of this.model.mapMarkers)
+                for(let markerElement of this.model.markers){
                 this.model.map.removeLayer(markerElement);
-            for(let markerElement of this.model.mapMarkersB)
-                this.model.map.removeLayer(markerElement);
+            }
             this.model.mapMarkers= [];
-            this.model.mapMarkersB = [];
 
+
+            
             for(let markerInfo of newVal){
-                let colorKoef = 0;
+                let colorKoef = 300;
                 if(markerInfo.measurements[0]!=undefined)
-                    colorKoef = Math.abs(1/((markerInfo.measurements[0].pM1 + markerInfo.measurements[0].pM25 + markerInfo.measurements[0].pM10) / 3 /300)/100);
+                    colorKoef = 1/((markerInfo.measurements[0].pM1 + markerInfo.measurements[0].pM25 + markerInfo.measurements[0].pM10) / 3 /300)/100;
                 console.log(colorKoef);
                 let R = Math.floor( 255 * (1 -colorKoef)) //.toString(16);
                 console.log("R "+R);
@@ -234,17 +232,15 @@ const Map = Vue.extend({
 
                 let color = '#'+R  +G  +'77';
                 console.log(color);
-                if(markerInfo.measurements[0]==undefined) color = "333333";
                 var circle = L.circle([markerInfo.latitude, markerInfo.longitude], {
                     color: 'red',
                     fillColor: color,
                     stroke:false,
                     fillOpacity: 0.5,
                     radius: 300,
-                }).addTo(this.model.map).on('click', this.onMarkerClick);
-                this.model.mapMarkersB.push(circle);
+                }).addTo(this.model.map);
             }
-            //this.model.map.on('click', this.onMarkerClick);
+            this.model.map.on('click', this.onMarkerClick);
             for(let markerInfo of newVal){
                 
                 let mcircle = L.circle([markerInfo.latitude, markerInfo.longitude], {
